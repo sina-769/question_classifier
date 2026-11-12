@@ -55,6 +55,12 @@ this repository under the Apache-2.0 license. If you redistribute the
 *reconstructed datasets* (the CSVs produced by `build_data.py`), the
 upstream licenses above apply to the question texts.
 
+The AskDocs questions are titles of public Reddit posts (r/AskDocs), so
+Reddit's own terms may also apply to them. This repository contains no
+Reddit content and no trained model weights; it is a non-commercial
+portfolio project. If you rebuild the data, check Reddit's terms
+yourself, especially for commercial use or model training.
+
 ### Why the texts are not in the repo
 
 An earlier version of this repository shipped the combined CSVs directly.
