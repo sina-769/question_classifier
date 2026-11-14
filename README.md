@@ -8,7 +8,7 @@ a full training run that trains only 769 parameters (the encoder's 66M stay
 frozen), runs on CPU, ~98% accuracy on the held-out split.
 
 This classifier was part of a team portfolio project during my data-science
-training at Data Science Retreat (spring 2022); the classifier itself — concept, labeling, implementation — I built
+training at Data Science Retreat, Berlin (January–April 2022); the classifier itself — concept, labeling, implementation — I built
 on my own. In 2026 the repository was reworked for licensing
 compliance: the raw question texts were removed and replaced by a
 reproducible build pipeline (see below for what changed and why).
