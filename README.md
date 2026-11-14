@@ -7,8 +7,8 @@ health(care) topic. Built on a method from
 a full training run that trains only 769 parameters (the encoder's 66M stay
 frozen), runs on CPU, ~98% accuracy on the held-out split.
 
-This classifier was part of a team portfolio project in my 2022 data-science
-bootcamp; the classifier itself — concept, labeling, implementation — I built
+This classifier was part of a team portfolio project during my data-science
+training at Data Science Retreat (spring 2022); the classifier itself — concept, labeling, implementation — I built
 on my own. In 2026 the repository was reworked for licensing
 compliance: the raw question texts were removed and replaced by a
 reproducible build pipeline (see below for what changed and why).
@@ -55,11 +55,13 @@ this repository under the Apache-2.0 license. If you redistribute the
 *reconstructed datasets* (the CSVs produced by `build_data.py`), the
 upstream licenses above apply to the question texts.
 
-The AskDocs questions are titles of public Reddit posts (r/AskDocs), so
-Reddit's own terms may also apply to them. This repository contains no
-Reddit content and no trained model weights; it is a non-commercial
-portfolio project. If you rebuild the data, check Reddit's terms
-yourself, especially for commercial use or model training.
+The AskDocs questions are titles of public Reddit posts (r/AskDocs). This
+repository contains no Reddit content and no trained model weights, and it
+is a non-commercial learning project. Reddit's
+[Public Content Policy](https://support.reddithelp.com/hc/en-us/articles/26410290525844-Public-Content-Policy)
+allows non-commercial uses "such as learning and community" and asks
+commercial users to contact Reddit first. If you rebuild the data for
+commercial use, check Reddit's terms yourself.
 
 ### Why the texts are not in the repo
 
