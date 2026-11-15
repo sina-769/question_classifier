@@ -7,11 +7,39 @@ health(care) topic. Built on a method from
 a full training run that trains only 769 parameters (the encoder's 66M stay
 frozen), runs on CPU, ~98% accuracy on the held-out split.
 
-This classifier was part of a team portfolio project during my data-science
-training at Data Science Retreat, Berlin (January–April 2022); the classifier itself — concept, labeling, implementation — I built
-on my own. In 2026 the repository was reworked for licensing
-compliance: the raw question texts were removed and replaced by a
-reproducible build pipeline (see below for what changed and why).
+In 2026 the repository was reworked for licensing compliance: the raw
+question texts were removed and replaced by a reproducible build pipeline
+(see below for what changed and why).
+
+## Context
+
+This classifier was part of a team portfolio project during my
+data-science training at Data Science Retreat, Berlin (January–April
+2022), built to get hands-on with transformer models. I led the project:
+I designed and built the classifier on my own — concept, labeling,
+implementation — did most of the remaining work, and set the direction
+for the team's technical tasks.
+
+The pipeline routed incoming questions: health questions were flagged so
+that the answers of a downstream language model could be checked
+separately. Alongside the classifier, we fine-tuned the smallest GPT-2,
+connected a GPT-3 model via the OpenAI API, experimented with GPT-Neo and
+GPT-J, and ran systematic tests of how well these models answered health
+questions, to get a feel for where the technology stood.
+
+The health labels are expert labels: I labeled the questions as a
+pharmacist, based on the kinds of health questions that come up in
+community pharmacy practice.
+
+**Looking back from 2026:** a system that answers medical questions would
+today likely fall under the EU Medical Device Regulation, so one would
+rather use the classifier the other way round: let the language model
+handle only non-medical questions and route health questions to a human.
+That shifts the critical metric from overall accuracy to recall on health
+questions. Also, nearly all health questions come from one forum
+(r/AskDocs) and nearly all others from Wikipedia-based SQuAD, so part of
+the ~98% may reflect source style rather than topic; the 63 health
+questions within SQuAD are the real test for that.
 
 ## How it works
 
