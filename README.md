@@ -39,7 +39,8 @@ That shifts the critical metric from overall accuracy to recall on health
 questions. Also, nearly all health questions come from one forum
 (r/AskDocs) and nearly all others from Wikipedia-based SQuAD, so part of
 the ~98% may reflect source style rather than topic; the 63 health
-questions within SQuAD are the real test for that.
+questions within SQuAD are the real test for that (see [Results](#results):
+75% recall on the 12 of them in the test split).
 
 ## How it works
 
@@ -65,6 +66,41 @@ python build_data.py        # downloads sources, writes data/*.csv
 python evaluate.py           # trains + scores the classifier (CPU, ~5 min)
 python train_classifier.ipynb  # or open in Colab/Jupyter
 ```
+
+## Results
+
+Held-out test split (455 questions: 181 health, 274 other), classifier
+fitted on the train split only, default threshold 0.5. Output of
+`evaluate.py`; 95% confidence intervals from 2,000 bootstrap resamples of
+the test split.
+
+| Class | Precision | Recall | F1 | n |
+|---|---|---|---|---|
+| health | 0.978 [0.953, 0.995] | 0.967 [0.938, 0.989] | 0.972 [0.953, 0.988] | 181 |
+| other | 0.978 | 0.985 | 0.982 | 274 |
+| macro avg | 0.978 | 0.976 | 0.977 | 455 |
+
+Accuracy 0.978 [0.963, 0.991], ROC-AUC 0.998. Confusion matrix: 6 health
+questions missed, 4 other questions flagged as health. With 455 test
+questions the intervals are about ±2–3 points wide, so the gap to the
+98.0% of 2022 is not a real difference.
+
+**Per source.** Health questions from AskDocs are recognized at 98%
+(166/169), but the health questions within SQuAD only at 75% (9/12). The
+SQuAD subset is small, but it supports the concern raised above: part
+of the overall score comes from source style (Reddit title vs. Wikipedia
+question), not topic.
+
+**Threshold.** If health questions are to be routed to a human, recall on
+health is the metric that matters. Lowering the threshold on p(health)
+from 0.5 to 0.2 raises health recall to 0.994 (1 miss instead of 6) at
+precision 0.957 (8 false alarms instead of 4). The threshold was read off
+the test split itself, so these numbers are optimistic; a real system
+would pick it on a separate validation split.
+
+Several of the 10 errors are borderline labels rather than model mistakes
+(e.g. *"What condition was attributed to binge drinking in a 2004 study?"*,
+labeled other).
 
 ## Data sources & licenses
 
@@ -96,7 +132,9 @@ commercial use, check Reddit's terms yourself.
 An earlier version of this repository shipped the combined CSVs directly.
 A provenance review found that ~41% of those rows could not be traced to
 a licensable source with certainty, so they were dropped; the remaining
-2,226 rows are reproduced deterministically from the two sources above.
+2,226 labeled rows are reproduced deterministically from the two sources
+above. Of these, 2,014 form the train/test splits (1,559 / 455); 212 are
+marked `split=unused` and are only written with `--include-unused`.
 This keeps the repo clean for portfolio use without silently redistributing
 third-party forum content.
 
@@ -104,14 +142,15 @@ The cleanup cost nothing in accuracy: the reduced dataset scores **97.8%**
 on the held-out test split with the notebook's method (frozen DistilBERT
 + logistic regression), vs. 98.0% for the original 2022 dataset with ~70%
 more rows — the classifier was already in its saturation region.
-`evaluate.py` reproduces this number without Jupyter.
+`evaluate.py` reproduces this number without Jupyter, together with the
+metrics under [Results](#results).
 
 ## Repository layout
 
 ```
 train_classifier.ipynb   # end-to-end: encode -> features -> logistic regression
 build_data.py            # dataset build from upstream sources
-evaluate.py              # same method as a script: train + score, no Jupyter
+evaluate.py              # same method as a script: train + score (P/R/F1, CIs, per source), no Jupyter
 visualize.py             # UMAP 2D projection of the hidden states -> docs/*.png
 labels.csv               # labeling decisions (source, source_id, label, split)
 data/                    # generated output (git-ignored)
